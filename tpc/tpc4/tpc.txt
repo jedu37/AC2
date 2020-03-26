@@ -1,0 +1,26 @@
+Relógio HH:MM:SS
+
+a) usar o Core Timer para controlar o tempo
+   DONE
+
+b) imprimir no ecrâ do PC o relógio: HH:MM:SS
+   - usar o system call printInt(), em base 10, output formatado com 2 dígitos
+   - pode-se imprimir sempre na mesma linha fazendo printStr("\r");
+   DONE
+
+c) mostrar nos dois displays o valor corrente de HH ou MM ou SS
+   - o valor a mostrar depende da combinação dos bits RB1 e RB0:
+   - 00: SS, 01: MM, 10: HH, 11: HH e MM alternadamente (0.5s cada)
+
+d) o LED ligado ao porto RE0 deve mudar de estado a cada 0.5s
+   (fica ON quando o contador de segundos muda)
+   DONE
+
+e) a frequência de refresh do sistema de visualização deve ser 100 Hz
+   (atualização dos displays a cada 10 ms)
+
+Data de entrega:  11/03, 18:00
+
+O trabalho é individual.
+Um único ficheiro (nr_mec.c).
+A submissão é feita EXCLUSIVAMENTE através do moodle.
