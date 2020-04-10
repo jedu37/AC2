@@ -8,6 +8,8 @@
         .globl main
 
 main:   li $t0,0                            # int counter = 0;
+        li $v0,RESET_CORE_TIMER             #
+        syscall                             # resetCoreTimer();
 
 while:  li $v0,1                    
         syscall
@@ -16,13 +18,13 @@ while:  li $v0,1
         li $v0,READ_CORE_TIMER              # while (1) {
         syscall                             #
 
-        bne $v0,200000,while                # while(readCoreTimer() < 200000);
+        blt $v0,20000000,while              # while(readCoreTimer() < 200000);
         li $v0,RESET_CORE_TIMER             #
         syscall                             # resetCoreTimer();
 
         li $a0,' '                          #
         li $v0,PUT_CHAR                     #
-        syscall                             # putChar(' ');
+        syscall                             # putChar('\r');
 
         addi $t0,$t0,1                      #
         move $a0,$t0                        #
