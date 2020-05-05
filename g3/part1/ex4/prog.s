@@ -23,7 +23,7 @@ while:  li $v0,1
         syscall
         beq $v0,'x',end
 
-        li $a0, 10
+        li $a0, 5000
         jal delay
 
         xor $t3,0x0001 # RE0 = \RE0
