@@ -56,7 +56,7 @@ sfrs             0x00000000bf800000 0x0000000000100000
 
 Linker script and memory map
 
-LOAD a.o
+LOAD g2/part2/ex1/a.o
 LOAD /opt/pic32mx/lib/libdetpic32.a
 LOAD /opt/pic32mx/lib/gcc/pic32mx/3.4.4/libgcc.a
 LOAD /opt/pic32mx/lib/libm.a
@@ -371,7 +371,7 @@ LOAD /opt/pic32mx/lib/startup.o
 .text           0x000000009d001400      0x124
                 0x000000009d001400                _text_begin = .
  *(.text .stub .text.* .gnu.linkonce.t.*)
- .text          0x000000009d001400       0x74 a.o
+ .text          0x000000009d001400       0x74 g2/part2/ex1/a.o
                 0x000000009d001400                main
  .text          0x000000009d001474       0xb0 /opt/pic32mx/lib/startup.o
                 0x000000009d0014e4                printStr
@@ -493,7 +493,7 @@ LOAD /opt/pic32mx/lib/startup.o
 
 .reginfo        0x0000000000000000       0x18
  *(.reginfo)
- .reginfo       0x0000000000000000       0x18 a.o
+ .reginfo       0x0000000000000000       0x18 g2/part2/ex1/a.o
 
 .stab
  *(.stab)
@@ -569,4 +569,4 @@ LOAD /opt/pic32mx/lib/startup.o
 
 /DISCARD/
  *(.note.GNU-stack)
-OUTPUT(a.elf elf32-tradlittlemips)
+OUTPUT(g2/part2/ex1/a.elf elf32-tradlittlemips)

@@ -15,15 +15,11 @@ loop1:   li  $a0,500
         lui $t1,0xBF88
         lw $t2,0x6050($t1)
 
-        li $a0,'\r'
+        li $a0,'\n'
         li $v0,putChar
-        syscall
-        li $a0,'\r'
+        li $a0,'\n'
         li $v0,putChar
-        syscall
-        li $a0,'\r'
-        li $v0,putChar
-        syscall
+
 
         move $a0,$t2
         li $a1, 0x00040002
