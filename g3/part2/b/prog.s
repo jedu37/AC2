@@ -28,18 +28,16 @@ main:   move $s0,$ra
         sw $t4, LATE($t1) # WRITE (Write LATE register)
 
 while:  li  $a0,500
-        jal	delay				# jump to delay and save position to $ra
+        jal delay				# jump to delay and save position to $ra
 
-        blt	$t0, 15, skip
-        li $t0,0
-        j out_s
+        bgt $t0, 0, skip
+        li $t0,15
 
-skip:   add  $t0, $t0,1
-
-out_s:  andi $t4,$t4, 0xFFF0 # 4 Bits = 0
+skip:   andi $t4,$t4, 0xFFF0 # 4 Bits = 0
         or   $t4,$t0 # 4 Bits do counter
         sw   $t4,LATE($t1) # WRITE (Write LATE register)
-        
+        sub  $t0, $t0, 1
+
         j while
         
 
