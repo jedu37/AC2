@@ -27,7 +27,7 @@ main:   move $s0,$ra
         andi $t4, $t4, 0xFFF0 # 4 Bits = 0
         sw $t4, LATE($t1) # WRITE (Write LATE register)
 
-while:  li  $a0,500
+while:  li  $a0,1000
         jal	delay				# jump to delay and save position to $ra
 
         blt	$t0, 15, skip

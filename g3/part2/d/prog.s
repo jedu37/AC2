@@ -12,7 +12,7 @@
 
 main:   move $s0,$ra
 
-        li $t0,0
+        li $t0,0X0
         
         lui $t1, SFR_BASE_HI #
         lw $t2, TRISE($t1) # READ (Mem_addr = 0xBF880000 + 0x6100)
@@ -27,17 +27,30 @@ main:   move $s0,$ra
         andi $t4, $t4, 0xFFF0 # 4 Bits = 0
         sw $t4, LATE($t1) # WRITE (Write LATE register)
 
-while:  li  $a0,250
+while:  li  $a0,666
         jal delay				# jump to delay and save position to $ra
 
-        bgt $t0, 0, skip
-        li $t0,15
+        andi $t5,$t0,0X000F
+
+zero4:  bne $t5,0x0,one4
+        li $t0,0x0
+        j skip
+one4:   bne $t5,0XF,skip
+        li $t0,0XFFFFFFFF
 
 skip:   andi $t4,$t4, 0xFFF0 # 4 Bits = 0
-        or   $t4,$t0 # 4 Bits do counter
+        or   $t4,$t5 # 4 Bits do counter
         sw   $t4,LATE($t1) # WRITE (Write LATE register)
-        sub  $t0, $t0, 1
+        rol  $t0,$t0,1
+        xori $t0,$t0,0X1
 
+        move $a0,$t0
+        li   $a1,2
+        li $v0,6
+        syscall
+        li   $a0,'\n'
+        li $v0,3
+        syscall
         j while
         
 
