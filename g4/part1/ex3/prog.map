@@ -56,7 +56,7 @@ sfrs             0x00000000bf800000 0x0000000000100000
 
 Linker script and memory map
 
-LOAD prog.o
+LOAD g4/part1/ex3/prog.o
 LOAD /opt/pic32mx/lib/libdetpic32.a
 LOAD /opt/pic32mx/lib/gcc/pic32mx/3.4.4/libgcc.a
 LOAD /opt/pic32mx/lib/libm.a
@@ -371,7 +371,7 @@ LOAD /opt/pic32mx/lib/startup.o
 .text           0x000000009d001400      0x1c0
                 0x000000009d001400                _text_begin = .
  *(.text .stub .text.* .gnu.linkonce.t.*)
- .text          0x000000009d001400      0x110 prog.o
+ .text          0x000000009d001400      0x110 g4/part1/ex3/prog.o
                 0x000000009d001400                main
  .text          0x000000009d001510       0xb0 /opt/pic32mx/lib/startup.o
                 0x000000009d001580                printStr
@@ -394,7 +394,7 @@ LOAD /opt/pic32mx/lib/startup.o
 
 .rodata         0x000000009d0015c0       0x34
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata        0x000000009d0015c0       0x1c prog.o
+ .rodata        0x000000009d0015c0       0x1c g4/part1/ex3/prog.o
  .rodata        0x000000009d0015dc       0x15 /opt/pic32mx/lib/startup.o
  *(.rodata1)
                 0x000000009d0015f4                . = ALIGN (0x4)
@@ -491,11 +491,11 @@ LOAD /opt/pic32mx/lib/startup.o
 
 .pdr            0x0000000000000000       0x20
  *(.pdr)
- .pdr           0x0000000000000000       0x20 prog.o
+ .pdr           0x0000000000000000       0x20 g4/part1/ex3/prog.o
 
 .reginfo        0x0000000000000000       0x18
  *(.reginfo)
- .reginfo       0x0000000000000000       0x18 prog.o
+ .reginfo       0x0000000000000000       0x18 g4/part1/ex3/prog.o
 
 .stab
  *(.stab)
@@ -517,7 +517,7 @@ LOAD /opt/pic32mx/lib/startup.o
 
 .comment        0x0000000000000000       0x4d
  *(.comment)
- .comment       0x0000000000000000       0x4d prog.o
+ .comment       0x0000000000000000       0x4d g4/part1/ex3/prog.o
 
 .debug
  *(.debug)
@@ -572,6 +572,6 @@ LOAD /opt/pic32mx/lib/startup.o
 
 /DISCARD/
  *(.note.GNU-stack)
-OUTPUT(prog.elf elf32-tradlittlemips)
+OUTPUT(g4/part1/ex3/prog.elf elf32-tradlittlemips)
 
 .mdebug.abi32   0x000000009d0015f4        0x0
