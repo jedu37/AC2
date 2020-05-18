@@ -4,6 +4,7 @@ void delay(unsigned int);
 
 int main(void){
 
+    unsigned char segment; 
     TRISB = (TRISB & 0x00FF);
     LATB = (LATB & 0x00FF);
     
@@ -14,23 +15,32 @@ int main(void){
 
     while (1)
     {
-        LATD = (LATD ^ 0x0060);
-        LATB = (LATB & 0x00FF);
-        delay(500);
-        LATB = (LATB |0x01FF);
-        delay(500);
-        LATB = (LATB |0x02FF);
-        delay(500);
-        LATB = (LATB |0x04FF);
-        delay(500);
-        LATB = (LATB |0x08FF);
-        delay(500);
-        LATB = (LATB |0x10FF);
-        delay(500);
-        LATB = (LATB |0x20FF);
-        delay(500);
-        LATB = (LATB |0x40FF);
-        delay(500);
+        //LATD = (LATD ^ 0x0060);
+        //LATB = (LATB & 0x00FF);
+        //delay(500);
+        //LATB = (LATB |0x01FF);
+        //delay(500);
+        //LATB = (LATB |0x02FF);
+        //delay(500);
+        //LATB = (LATB |0x04FF);
+        //delay(500);
+        //LATB = (LATB |0x08FF);
+        //delay(500);
+        //LATB = (LATB |0x10FF);
+        //delay(500);
+        //LATB = (LATB |0x20FF);
+        //delay(500);
+        //LATB = (LATB |0x40FF);
+        //delay(500);
+        segment = 0x0100;
+
+        for(int i=0; i < 7; i++)
+        {
+            LATB = (LATB & 0x00FF);
+            LATB = (LATB |(segment | 0x00FF));
+            delay(500);
+            segment = segment << 1;
+        }
     }
 }
 
