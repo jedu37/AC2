@@ -4,44 +4,27 @@ void delay(unsigned int);
 
 int main(void){
 
-    unsigned char segment; 
-    TRISB = (TRISB & 0x00FF);
+    unsigned char segment;
+    int i;
+    LATDbits.LATD6 = 1; // display high active
+    LATDbits.LATD5 = 0; // display low inactive
+    TRISB = (TRISB & 0x00FF); // configure RB8-RB14 as outputs
     LATB = (LATB & 0x00FF);
+    TRISD = (TRISD & 0xFF9F); // configure RD5-RD6 as outputs
     
-    TRISD = (TRISD & 0xFF9F);
-    LATD = (LATD & 0xFF9F)|0x0040; //(LATD and 1111 1111 1001 1111 ) or 0000 0000 0100 0000
+    while(1){
 
+        //LATDbits.LATD6 = !LATDbits.LATD6 ; //
+        //LATDbits.LATD5 = !LATDbits.LATD5 ; // toggle display selection
+        segment = 1;
+        for(i=0; i < 7; i++){
 
-
-    while (1)
-    {
-        //LATD = (LATD ^ 0x0060);
-        //LATB = (LATB & 0x00FF);
-        //delay(500);
-        //LATB = (LATB |0x01FF);
-        //delay(500);
-        //LATB = (LATB |0x02FF);
-        //delay(500);
-        //LATB = (LATB |0x04FF);
-        //delay(500);
-        //LATB = (LATB |0x08FF);
-        //delay(500);
-        //LATB = (LATB |0x10FF);
-        //delay(500);
-        //LATB = (LATB |0x20FF);
-        //delay(500);
-        //LATB = (LATB |0x40FF);
-        //delay(500);
-        segment = 0x0100;
-
-        for(int i=0; i < 7; i++)
-        {
-            LATB = (LATB & 0x00FF);
-            LATB = (LATB |(segment | 0x00FF));
-            delay(500);
+            LATB = ((LATB & 0x00FF) |(segment | 0x00FF)); // send "segment" value to display
+            delay(500); // wait 0.5 second
             segment = segment << 1;
         }
     }
+    return 0;
 }
 
 void delay (unsigned int ms){
