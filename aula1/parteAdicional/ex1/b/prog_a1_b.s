@@ -117,6 +117,7 @@ else_s1: bne $s0,1,else_s2         #   else if( s == 1 )
 
 else_s2: bne $s0,2,while           #  else if( s == 2 )
          li $s1,0                  #         cnt = 0;
+         li $s0,0                  #         s = 0; 
          j while                   #
 
 

@@ -1,0 +1,23 @@
+a)
+
+20 Mhz
+
+20 000 000 -> 1 segundo
+    20 000 -> 0,001 segundo ( 1 milissegundo)
+
+
+K = 20 000 ( delay = ms * K)
+
+b)
+
+2^32 - 1 = 4 294 967 295 (ms vai ser uma variável num registo de 32 bits)
+
+Caso ms seja unsigned pode-se gerar um atraso de 4294967295 ms
+
+2^31 -1 = 2 147 483 647 
+
+Caso ms seja signed pode-se gerar um atraso de 2 147 483 647 ms
+
+
+
+
