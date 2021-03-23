@@ -2,27 +2,41 @@
 # cnt10 -> $s0
 # cnt5 -> $s1
 # cnt1 -> $s2
+# s -> $s3
 
         .equ printInt,6
         .equ putChar,3
+        .equ inKey,1
 
         .data
         .text
         .globl main
 
-main:   addiu $sp,$sp,-16           #Reservar Espaço na Stack
+main:   addiu $sp,$sp,-20           #Reservar Espaço na Stack
         sw $s0,0($sp)               # Salvar os Registos
         sw $s1,4($sp)               # 
         sw $s2,8($sp)               # 
-        sw $ra,12($sp)              # 
+        sw $s3,12($sp)
+        sw $ra,16($sp)              # 
 
         li $s0,0                    # cnt10 = 0
         li $s1,0                    # cnt5 = 0
         li $s2,0                    # cnt1 = 0
+        li $s3,0                    # s = 0
 
 while:                              # while(1){
+
+if5:    bne $s3,0,if6               #if(s == 0){
         li $a0,100                  #
-        jal delay                   # delay(100)
+        jal delay                   # delay(100);
+        j skip3                     #}
+
+if6:    bne $s3,1,skip3             # else if(s == 1){
+        li $a0,50                   #
+        jal delay                   # delay(50);
+                                    #}
+skip3:  
+        
 
 #PRINTING------------------------------------------------------
         li $a0,'\r'                 #
@@ -65,14 +79,26 @@ if2:    rem $t0,$s0,10              #
         bnez $t0,skip1              # if(cnt10 %10 == 0){
         addi $s2,$s2,1              #       cnt1++;
                                     #}
-skip1:
+skip1:  li $v0,inKey                #
+        syscall                     #
+        move $t0,$v0                # char c = inkey();
 
+if3:    bne $t0,'a',if4             # if(c == 'a'){
+        li $s3,1                    #   s = 1;
+        j skip2                     # } 
+
+if4:    bne $t0,'n',skip2           # if(c == 'c'){
+        li $s3,0                    #   s = 0;
+                                    # }  
+
+skip2:
         j while                     # }
 #Ending--------------------------------------------------------
         lw $s0,0($sp)               # 
         lw $s1,4($sp)               # 
-        lw $s2,8($sp)               # 
-        lw $ra,12($sp)              # Restaurar registos
-        addiu $sp,$sp,16            #Libertar Espaço na Stack
+        lw $s2,8($sp)               #
+        lw $s3,12($sp)               #  
+        lw $ra,16($sp)              # Restaurar registos
+        addiu $sp,$sp,20            #Libertar Espaço na Stack
         li $v0,0                    # return 0;
         jr $ra                      #}     
