@@ -8,6 +8,8 @@
         .equ printInt,6
         .equ putChar,3
         .equ inKey,1
+        .equ READ_CORE_TIMER,11
+        .equ RESET_CORE_TIMER,12
 
         .data
         .text
@@ -46,7 +48,7 @@ skip3:
         li $v0,putChar              #
         syscall                     # putChar('\r');
 
-        li $a0,$s2                  #
+        move $a0,$s2                  #
         li $a1,0x00050002           #
         li $v0,printInt             #
         syscall                     # printInt(cnt1, 2 | 5 << 16);
@@ -55,7 +57,7 @@ skip3:
         li $v0,putChar              #
         syscall                     # putChar(' ');
 
-        li $a0,$s1                  #
+        move $a0,$s1                  #
         li $a1,0x00050002           #
         li $v0,printInt             #
         syscall                     # printInt(cnt5, 2 | 5 << 16);
@@ -64,7 +66,7 @@ skip3:
         li $v0,putChar              #
         syscall                     # putChar(' ');
 
-        li $a0,$s0                  #
+        move $a0,$s0                  #
         li $a1,0x00050002           #
         li $v0,printInt             #
         syscall                     # printInt(cnt10, 2 | 5 << 16);
@@ -117,3 +119,19 @@ skip2:
         addiu $sp,$sp,24            #Libertar Espaço na Stack
         li $v0,0                    # return 0;
         jr $ra                      #}                         #}     
+
+delay:  move $t0,$a0                # ms = $t0 = $a0
+
+for_d:  ble $t0, 0, end_d	    # for(ms > 0){
+
+        li $v0,RESET_CORE_TIMER     #
+        syscall                     #   resetCoreTimer();
+
+while_d:        li $v0,READ_CORE_TIMER      # 
+                syscall                     #
+                blt $v0,20000,while_d       #   while(readCoreTimer() < K);
+
+                sub $t0, $t0, 1	            #   ms--;
+                j for_d                     # }
+
+end_d:    jr $ra                      #}    

@@ -36,4 +36,20 @@ while:  li $a0,10                       #
         addiu $sp,$sp,8                 # Libertar espaço na StacK
 
         li $v0,1                        # return 0;
-        jr $ra                          # }        
+        jr $ra                          # }
+
+delay:  move $t0,$a0                # ms = $t0 = $a0
+
+for_d:  ble $t0, 0, end_d	    # for(ms > 0){
+
+        li $v0,RESET_CORE_TIMER     #
+        syscall                     #   resetCoreTimer();
+
+while_d:        li $v0,READ_CORE_TIMER      # 
+                syscall                     #
+                blt $v0,20000,while_d       #   while(readCoreTimer() < K);
+
+                sub $t0, $t0, 1	            #   ms--;
+                j for_d                     # }
+
+end_d:    jr $ra                      #}    
