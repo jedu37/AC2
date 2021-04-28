@@ -10,7 +10,7 @@ Parte II:
 1 - a) x
     b) x
     c) x
-    d)
-    e)
-    f)
-    g)
+    d) x
+    e) x
+    f) x
+    g) x

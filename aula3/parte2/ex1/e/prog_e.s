@@ -38,10 +38,10 @@ mid:    lw $t1, LATE($s0)                   # Read LATE
         sw $t1, LATE($s0)                   # WRITE LATE  
 
 
-        andi   $t2, $t1, 0x0008         #               $t2 = RE3
-        srl     $t2, $t2, 3             #               goes to LSB
-        sll     $s1, $s1, 1             #               count = count << 1
-        xori    $t2, $t2, 0x0001        #               $t2 = RE3\
+        andi   $t2, $t1, 0x0001         #               $t2 = RE0
+        sll     $t2, $t2, 3             #               goes to bit3
+        srl     $s1, $s1, 1             #               count = count << 1
+        xori    $t2, $t2, 0x0008        #               $t2 = RE0\
         or      $s1, $s1, $t2           #               first bit of count = RE3\
         andi    $s1, $s1, 0x000F        #               count &= 0x000F
 

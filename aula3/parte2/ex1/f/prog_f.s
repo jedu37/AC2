@@ -37,14 +37,25 @@ mid:    lw $t1, LATE($s0)                   # Read LATE
         or $t1,$t1,$t0                      # LATE_bit0 = PortB./bit3.bit2.bit1./bit0
         sw $t1, LATE($s0)                   # WRITE LATE  
 
+        lw $t3, PORTB($s0)
+        andi $t3,$t3,0x0004
+        srl $t3,$t3,2
 
-        andi   $t2, $t1, 0x0008         #               $t2 = RE3
+l_s:    bne $t3,1,r_s
+        andi   $t2, $t1, 0x0001         #               $t2 = RE0
+        sll     $t2, $t2, 3             #               goes to bit3
+        srl     $s1, $s1, 1             #               count = count << 1
+        xori    $t2, $t2, 0x0008        #               $t2 = RE0\
+        or      $s1, $s1, $t2           #               first bit of count = RE3\
+        andi    $s1, $s1, 0x000F        #               count &= 0x000F
+        j while;
+
+r_s:    andi   $t2, $t1, 0x0008         #               $t2 = RE3
         srl     $t2, $t2, 3             #               goes to LSB
         sll     $s1, $s1, 1             #               count = count << 1
         xori    $t2, $t2, 0x0001        #               $t2 = RE3\
         or      $s1, $s1, $t2           #               first bit of count = RE3\
         andi    $s1, $s1, 0x000F        #               count &= 0x000F
-
         j while                             #}
 
         lw $s0,0($sp)                       # Recuperar $s0 da stack
