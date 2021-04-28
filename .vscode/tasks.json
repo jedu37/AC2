@@ -4,15 +4,23 @@
     "version": "2.0.0",
     "tasks": [
       {
-        "label": "CompileToMips",
+        "label": "Load",
         "type": "shell",
-        "command": "pcompile ${relativeFile}; ldpic32 ${relativeFileDirname}/${fileBasenameNoExtension} -p \"/dev/ttyS3\"; rm ${relativeFileDirname}/*.hex;rm ${relativeFileDirname}/*.elf; rm *.map; rm ${relativeFileDirname}/*.o; pterm -p \"/dev/ttyS3\"",
+        "command": "ldpic32 ${relativeFileDirname}/${fileBasenameNoExtension} -p \"/dev/ttyS9\"",
         "group": {
           "kind": "build",
           "isDefault": true
         }
       },
-
+      {
+        "label": "Run",
+        "type": "shell",
+        "command": "pterm -p \"/dev/ttyS9\"",
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      },
       {
         "label": "FuckUpClean",
         "type": "shell",

@@ -34,17 +34,29 @@ main:   addiu $sp,$sp,-4    # Guardar registos na Stack
 #Reading----------------------------------------------------------
         la $a0, msg1        #
         li $v0, printStr    # 
-        syscall             # printStr("Introduza 2 strings: "); 
+        syscall             # printStr("Introduza 2 strings: ");
+
+        la $a0, seta        #
+        li $v0, printStr    # 
+        syscall             # printStr("->");
 
         la $a0,str1         #
         li $a1,STR_MAX_SIZE #
         li $v0,readStr      #
         syscall             # readStr( str1, STR_MAX_SIZE );
+        
+        la $a0, seta        #
+        li $v0, printStr    # 
+        syscall             # printStr("->");
 
         la $a0,str2         #
         li $a1,STR_MAX_SIZE #
         li $v0,readStr      #
         syscall             # readStr( str2, STR_MAX_SIZE );
+
+        la $a0, '\n'        #
+        li $v0, putChar     # 
+        syscall             # putChar("\n");
 
 #Results----------------------------------------------------------
         la $a0, msg2        #
@@ -170,7 +182,6 @@ for_sc: beq $a1,$t3,end_sc    #     src = src_last
 
         beq $t1,0, end_sc     #     $t1 != '\0';
         
-        beq $a0,$t2,end_sc    #     dst = dst_last
         sb $t1,0($a0)         #     *dst = *src;
 
         addiu $a0,$a0,1       #     dst ++;
@@ -189,7 +200,7 @@ strcat:                       # char *strcat(char *dst, char *src){
         sw $ra,4($sp)     #
         move $s0,$a0          #     char *p = dst;
 for_ca: lb $t0,0($a0)         # for( 
-        beq $t0,'\0',end_ca   #     *dst != '\0';
+        beq $t0,0X00,end_ca   #     *dst != '\0';
         addiu $a0,$a0,1       #     dst++ 
         j for_ca              #);
 
