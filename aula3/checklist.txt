@@ -1,10 +1,10 @@
 Parte I:
-1 -
-2 -
-3 -
-4 - a)
-    b)
-    c)
+1 - x
+2 - x
+3 - x
+4 - a) x
+    b) x
+    c) x
 
 Parte II:
 1 - a)

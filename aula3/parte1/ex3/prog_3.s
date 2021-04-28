@@ -16,21 +16,21 @@ main:   addiu $sp,$sp,-8                    # Reservar espaço na stack
 
         lui $s0, SFR_BASE_HI                #
         lw $t0, TRISE($s0)                  # READ (Read TRISE register)
-        andi $t0, $t0, 0xFFFE               # MODIFY (bit0=0 (0 means OUTPUT))
+        andi $t0, $t0, 0xFFF0               # MODIFY (bit0,bit1,bit2,bit3=0 (0 means OUTPUT))
         sw $t0, TRISE($s0)                  # WRITE (Write TRISE register)
 
         lw $t0, TRISB($s0)                  # READ (Read TRISB register)
-        ori $t0, $t0,0x0001                 # MODIFY (bit0=1 (1 means INPUT))
+        ori $t0, $t0,0x000F                 # MODIFY (bit0,bit1,bit2,bit3=1 (1 means INPUT))
         sw $t0, TRISB($s0)                  # WRITE (Write TRISB register)
 
 while:  li $a0,10                           #while(True){
         jal delay                           # delay(10)
 
         lw $t0, PORTB($s0)                  # READ (Read PORTB)
-        andi $t0, $t0, 0x0001               # $t0 = PORTB_bit0
+        xor $t0, $t0, 0x0009                # $t0 = /bit3.bit2.bit1./bit0
         lw $t1, LATE($s0)                   # Read LATE
-        andi $t1, $t1, 0xFFFE               # LATE_bit0 = 0
-        or $t1,$t1,$t0                      # LATE_bit0 = PORTB_bit0
+        andi $t1, $t1, 0xFFF0               # LATE_bit0,1,2,3 = 0
+        or $t1,$t1,$t0                      # LATE_bit0 = PortB./bit3.bit2.bit1./bit0
         sw $t1, LATE($s0)                   # WRITE LATE  
 
         j while                             #}

@@ -27,7 +27,7 @@ while:  li $a0,10                           #while(True){
         jal delay                           # delay(10)
 
         lw $t0, PORTB($s0)                  # READ (Read PORTB)
-        andi $t0, $t0, 0x0001               # $t0 = PORTB_bit0
+        xor $t0, $t0, 0x0001               # $t0 = PORTB_bit0
         lw $t1, LATE($s0)                   # Read LATE
         andi $t1, $t1, 0xFFFE               # LATE_bit0 = 0
         or $t1,$t1,$t0                      # LATE_bit0 = PORTB_bit0
