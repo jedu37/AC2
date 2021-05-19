@@ -1,13 +1,29 @@
 #include <detpic32.h>
-unsigned char toBcd(unsigned char value);
 void send2displays(unsigned char value);
+volatile unsigned char voltage = 0; // Global variable
+
+void delay(int ms)
+{
+    for(; ms > 0; ms--)
+    {
+        resetCoreTimer();
+        while(readCoreTimer() < 20000);
+    }
+}
+
+unsigned char toBcd(unsigned char value)
+{
+    return ((value / 10) << 4) + (value % 10);
+} 
+
 
 int main(void)
 {
+    unsigned int cnt = 0;
+    // Configure all (digital I/O, analog input, A/D module, interrupts)
     // Configure all (digital I/O, analog input, A/D module)
     TRISB = ( TRISB & 0x00FF);  // configure RB15-RD8 as outputs
     TRISD = (TRISD & 0xFF9F); // configure RD5-RD6 as outputs
-    // Configure the A/D module and port RB4 as analog input
     TRISBbits.TRISB4 = 1;       // RB4 digital output disconnected
     AD1PCFGbits.PCFG4= 0;       // RB4 configured as analog input (AN4)
     AD1CON1bits.SSRC = 7;       // Conversion trigger selection bits: in this
@@ -24,40 +40,43 @@ int main(void)
                                 // analog channel (0 to 15)
     AD1CON1bits.ON = 1;         // Enable A/D converter
                                 // This must the last command of the A/D
-                                // configuration sequence 
-    int i = 0;
-    unsigned char value;
+                                // configuration sequence
+    // Configure interrupt system
+    IPC6bits.AD1IP = 2; // configure priority of A/D interrupts
+    IEC1bits.AD1IE = 1; // enable A/D interrupts
+    IFS1bits.AD1IF = 0; // clear A/D interrupt flag 
+    
+    EnableInterrupts(); // Global Interrupt Enable
     while(1)
     {
-        if(i++ % 25 == 0) // 0, 250ms, 500ms, 750ms, ...
+        if(cnt % 25 == 0) // 250 ms (4 samples/second)
         {
-            // Convert analog input (4 samples)
-            AD1CON1bits.ASAM = 1;               // Start conversion
-            while(IFS1bits.AD1IF == 0);         // Wait while conversion not done (AD1IF == 0)
-            int c = 0;
-            int sum = 0;
-            int *p = (int *)(&ADC1BUF0);
-            for(c = 0; c < 4; c++ )
-            {
-                sum += p[c*4];
-            } 
-            IFS1bits.AD1IF = 0;                 // Reset AD1IF
-            int VAL_AD = sum/4;                 // Calculate buffer average
-            unsigned char V=(VAL_AD*33+511)/1023;         // Calculate voltage amplitude
-            value = toBcd(V);// Convert voltage amplitude to decimal
+            // Start A/D conversion
+            AD1CON1bits.ASAM = 1;  
         }
-        send2displays(value);// Send voltage value to displays
-
-        resetCoreTimer();
-        while(readCoreTimer() < 200000);// Wait 10 ms (using the core timer)
+        // Send "voltage" variable to displays
+        send2displays(toBcd(voltage&0xFF));
+        cnt++;
+        // Wait 10 ms
+        delay(10);
     }
     return 0;
 }
 
-unsigned char toBcd(unsigned char value)
-{
-    return ((value / 10) << 4) + (value % 10);
-} 
+void _int_(27) isr_adc(void)
+{   
+    int sum = 0;
+    // Calculate buffer average (8 samples)
+    int *p = (int *)(&ADC1BUF0);
+    for(;p<= (int *)(&ADC1BUFF);p+=4){
+        sum += *p;
+    }
+    // Calculate voltage amplitude
+    double ave = (double)sum/8.0;// Calculate buffer average
+    // Convert voltage amplitude to decimal. Assign it to "voltage"
+    voltage = (char)((ave * 33)/1023);
+    IFS1bits.AD1IF = 0; // Reset AD1IF flag
+}
 
 void send2displays(unsigned char value)
 {

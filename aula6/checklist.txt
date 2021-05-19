@@ -1,0 +1,7 @@
+Parte I:
+1 - x
+2 - x
+
+Parte II:
+1 - ~
+2 - ~
